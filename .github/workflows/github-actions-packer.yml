@@ -38,7 +38,7 @@ jobs:
         with:
           command: validate
           arguments: -syntax-only
-          target: apache.pkr.hcl 
+          target: jango-app.pkr.hcl 
 
      # build artifact
       - name: Build Artifact
