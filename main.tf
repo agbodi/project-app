@@ -9,17 +9,28 @@ resource "aws_vpc" "main" {
   }
 }
 
+data "aws_ami" "jango" {
+  most_recent = true
 
+  filter {
+    name   = "name"
+    values = ["jango-base-*"]
+  }
 
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
 
+  owners = ["587719168126"] # Canonical
+}
 
-#data "aws_ami" "example" {
-#  executable_users = ["self"]
-#  most_recent      = true
-#  owners           = ["self"]
-#
-#  filter {
-#    name   = "tag:Name"
-#    values = ["jango-base-*"]
-#  }
-#}
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.jango.id
+  instance_type = "t3.micro"
+
+  tags = {
+    Name = "HelloWorld"
+  }
+}
+
