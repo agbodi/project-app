@@ -13,6 +13,7 @@ defaults:
 jobs:
   terraform_test:
     name: Test Run
+    if: github.ref != 'refs/heads/main'
     #name:   ${{matrix.runner}} - ${{ matrix.environment }}
     #runs-on: [ '${{ matrix.runner }}']
     runs-on: ubuntu-latest
@@ -29,13 +30,14 @@ jobs:
         id: init
         run: |
            rm -rf .terraform
-           terraform init -backend-config=${{ matrix.environment }}/backend.tfvars -upgrade=true -no-color -input=false
+           terraform init -backend-config=test/backend.tfvars -upgrade=true -no-color -input=false
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -input=false -var-file=${{ matrix.environment }}/terraform.tfvars -no-color
+          terraform plan -input=false -var-file=test/terraform.tfvars -no-color
   terraform_prod: 
     name: Prod Run
+    if: github.ref == 'refs/heads/main'
     #name:   ${{matrix.runner}} - ${{ matrix.environment }}
     #runs-on: [ '${{ matrix.runner }}']
     runs-on: ubuntu-18.04
@@ -52,19 +54,19 @@ jobs:
         id: init
         run: |
            rm -rf .terraform
-           terraform init -backend-config=${{ matrix.environment }}/backend.tfvars -upgrade=true -no-color -input=false
+           terraform init -backend-config=prod/backend.tfvars -upgrade=true -no-color -input=false
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -input=false -var-file=${{ matrix.environment }}/terraform.tfvars -no-color
+          terraform plan -input=false -var-file=prod/terraform.tfvars -no-color
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         id: apply
-        run: terraform apply -auto-approve -input=false -var-file=${{ matrix.environment }}/terraform.tfvars
+        run: terraform apply -auto-approve -input=false -var-file=prod/terraform.tfvars
       - name: Terraform destroy
         if: github.ref == 'refs/heads/destroy'
         id: destroy
-        run: terraform destroy -auto-approve -input=false -var-file=${{ matrix.environment }}/terraform.tfvars
+        run: terraform destroy -auto-approve -input=false -var-file=prod/terraform.tfvars
   comment:
     runs-on: ubuntu-latest
     needs: terraform_test
