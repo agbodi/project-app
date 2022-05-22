@@ -37,7 +37,7 @@ jobs:
           terraform plan -input=false -var-file=test/terraform.tfvars -no-color
   terraform_prod: 
     name: Prod Run
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/destroy'
     #name:   ${{matrix.runner}} - ${{ matrix.environment }}
     #runs-on: [ '${{ matrix.runner }}']
     runs-on: ubuntu-18.04
