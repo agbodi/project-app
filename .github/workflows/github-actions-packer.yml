@@ -11,7 +11,7 @@ defaults:
   run:
     shell: bash
 jobs:
-  terraform:
+  terraform_test:
     name: Test Run
     #name:   ${{matrix.runner}} - ${{ matrix.environment }}
     #runs-on: [ '${{ matrix.runner }}']
@@ -34,6 +34,7 @@ jobs:
         id: plan
         run: |
           terraform plan -input=false -var-file=${{ matrix.environment }}/terraform.tfvars -no-color
+  terraform_prod: 
     name: Prod Run
     #name:   ${{matrix.runner}} - ${{ matrix.environment }}
     #runs-on: [ '${{ matrix.runner }}']
