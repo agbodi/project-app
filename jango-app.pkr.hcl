@@ -72,6 +72,12 @@ build {
   provisioner "shell" {
     inline = ["/bin/sleep 30s"]
   }
+
+  provisioner "shell" {
+    execute_command   = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    script            = "./setup.sh"
+    expect_disconnect = true
+  }
   provisioner "ansible" {
     playbook_file   = "./ansible/application.yml"
     extra_arguments = ["--become-user=root", "--become", "-v"]
