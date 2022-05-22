@@ -13,7 +13,7 @@ defaults:
 jobs:
   terraform_test:
     name: Test Run
-    if: github.ref != 'refs/heads/main' || github.ref != 'refs/heads/destroy'
+    if: github.ref != 'refs/heads/main' #|| github.ref != 'refs/heads/destroy'
     #name:   ${{matrix.runner}} - ${{ matrix.environment }}
     #runs-on: [ '${{ matrix.runner }}']
     runs-on: ubuntu-latest
